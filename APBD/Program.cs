@@ -2,11 +2,10 @@
 
 public class Program
 {
-    public static List<Container> containers = new List<Container>();
-    public static List<ContainerShip> containerShips = new List<ContainerShip>();
+    public static List<Container> Containers = new List<Container>();
+    public static List<ContainerShip> ContainerShips = new List<ContainerShip>();
     public static void Main(string[] args)
     {
-        CoolingContainer.CreateDictionary();
         bool run = true;
         while (run)
         {
@@ -39,10 +38,10 @@ public class Program
                         UnloadContainer();
                         break;
                     case 4:
-                        createShip();
+                        CreateShip();
                         break;
                     case 5:
-                        addToShip();
+                        AddToShip();
                         break;
                     case 6:
                         RemoveContainerFromShip();
@@ -51,7 +50,7 @@ public class Program
                         SwapContainersBetweenShips();
                         break;
                     case 8:
-                        showShipContainers();
+                        ShowShipContainers();
                         break;
                     case 9:
                         ShowContainers();
@@ -79,7 +78,7 @@ public class Program
         }
     }
 
-    public static void CreateContainer()
+    private static void CreateContainer()
     {
         Console.WriteLine("What type of container do you want to create?");
         Console.WriteLine("1. Liquid container");
@@ -101,12 +100,12 @@ public class Program
             case 1:
                 Console.Write("Is hazardous 1/0: ");
                 int.TryParse(Console.ReadLine(), out int ishazardous);
-                containers.Add(new LiquidContainer(heigth,weight,depth,maxLoad, ishazardous));
+                Containers.Add(new LiquidContainer(heigth,weight,depth,maxLoad, ishazardous));
                 break;
             case 2:
                 Console.Write("pressure: ");
                 float.TryParse(Console.ReadLine(), out float pressure);
-                containers.Add(new GasContainer(heigth,weight,depth,maxLoad, pressure));
+                Containers.Add(new GasContainer(heigth,weight,depth,maxLoad, pressure));
                 break;
             case 3:
                 Console.Write("Temperature: ");
@@ -119,7 +118,7 @@ public class Program
                 string p = Console.ReadLine();
                 try
                 {
-                    containers.Add(new CoolingContainer(heigth,weight,depth,maxLoad, temperature, p));
+                    Containers.Add(new CoolingContainer(heigth,weight,depth,maxLoad, temperature, p));
                 }
                 catch (Exception e)
                 {
@@ -143,39 +142,39 @@ public class Program
         }
     }
 
-    public static void addToShip()
+    public static void AddToShip()
     {
         
-        for(int i=0;i<containers.Count;i++)
-            if(containers[i].ship==null) Console.WriteLine(i+1+". "+containers[i].getInfo());
+        for(int i=0;i<Containers.Count;i++)
+            if(Containers[i].Ship==null) Console.WriteLine(i+1+". "+Containers[i].Info());
         Console.Write("Choose container: ");
         int.TryParse(Console.ReadLine(), out int con);
         Console.Clear();
         ContainerShip ship = ChooseShip();
-        ship.loadContainter(containers[con-1]);
+        ship.LoadContainter(Containers[con-1]);
     }
 
     public static Container ChooseContainer()
     {
-        for(int i=0;i<containers.Count;i++)
-            Console.WriteLine(i+1+". "+containers[i].getInfo());
+        for(int i=0;i<Containers.Count;i++)
+            Console.WriteLine(i+1+". "+Containers[i].Info());
         Console.WriteLine("Choose container: ");
         int.TryParse(Console.ReadLine(), out int con);
         Console.Clear();
-        return containers[con-1];
+        return Containers[con-1];
     }
     
     public static ContainerShip ChooseShip()
     {
-        for(int i=0;i<containerShips.Count;i++)
-            Console.WriteLine(i+1+". "+containerShips[i].getInfo());
+        for(int i=0;i<ContainerShips.Count;i++)
+            Console.WriteLine(i+1+". "+ContainerShips[i].Info());
         Console.Write("Choose Ship: ");
         int.TryParse(Console.ReadLine(), out int ship);
         Console.Clear();
-        return containerShips[ship-1];
+        return ContainerShips[ship-1];
     }
 
-    public static void createShip()
+    private static void CreateShip()
     {
         Console.Write("Max speed: ");
         float.TryParse(Console.ReadLine(), out float maxSpeed);
@@ -183,64 +182,64 @@ public class Program
         int.TryParse(Console.ReadLine(), out int maxCapacity);
         Console.Write("Max Containers Weight: ");
         float.TryParse(Console.ReadLine(), out float maxContainersWeight);
-        containerShips.Add(new ContainerShip(maxSpeed,maxCapacity,maxContainersWeight));
+        ContainerShips.Add(new ContainerShip(maxSpeed,maxCapacity,maxContainersWeight));
     }
 
-    public static void showShipContainers()
+    private static void ShowShipContainers()
     {
         ContainerShip ship = ChooseShip();
         Console.WriteLine("Contains: ");
         foreach (Container con in ship.Containers)
         {
-            Console.WriteLine(con.getInfo());
+            Console.WriteLine(con.Info());
         }
     }
 
-    public static void UnloadContainer()
+    private static void UnloadContainer()
     {
         Container con = ChooseContainer();
         con.Unload();
     }
 
-    public static void ShowContainers()
+    private static void ShowContainers()
     {
         Console.WriteLine("Containers list:");
-        for(int i=0;i<containers.Count;i++)
-            Console.WriteLine(i+1+". "+containers[i].getInfo());
+        for(int i=0;i<Containers.Count;i++)
+            Console.WriteLine(i+1+". "+Containers[i].Info());
     }
 
-    public static void ShowShips()
+    private static void ShowShips()
     {
         Console.WriteLine("Ships list:");
-        for(int i=0;i<containerShips.Count;i++)
-            Console.WriteLine(containerShips[i].getInfo());
+        for(int i=0;i<ContainerShips.Count;i++)
+            Console.WriteLine(ContainerShips[i].Info());
     }
 
-    public static void RemoveContainerFromShip()
+    private static void RemoveContainerFromShip()
     {
         ContainerShip ship = ChooseShip();
         for(int i=0;i<ship.Containers.Count;i++)
-            Console.WriteLine(i+1+". "+ship.Containers[i].getInfo());
+            Console.WriteLine(i+1+". "+ship.Containers[i].Info());
         Console.Write("Remove: ");
         int.TryParse(Console.ReadLine(), out int num);
         Container con = ship.Containers[num - 1];
-        ship.removeContainer(con);
-        con.ship=null;
+        ship.RemoveContainer(con);
+        con.Ship=null;
     }
 
-    public static void SwapContainersBetweenShips()
+    private static void SwapContainersBetweenShips()
     {
         ContainerShip ship = ChooseShip();
         for(int i=0;i<ship.Containers.Count;i++)
-            Console.WriteLine(i+1+". "+ship.Containers[i].getInfo());
+            Console.WriteLine(i+1+". "+ship.Containers[i].Info());
         Console.Write("Remove: ");
         int.TryParse(Console.ReadLine(), out int num);
         Container con = ship.Containers[num - 1];
-        ship.removeContainer(con);
+        ship.RemoveContainer(con);
         ContainerShip shipToMoveTo = ChooseShip();
-        if (!shipToMoveTo.loadContainter(con))
+        if (!shipToMoveTo.LoadContainter(con))
         {
-            ship.loadContainter(con);
+            ship.LoadContainter(con);
             Console.WriteLine("Impossible Action");
         }
     }

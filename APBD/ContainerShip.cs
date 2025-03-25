@@ -4,10 +4,10 @@ public class ContainerShip
 {
     private static int _id;
     private int myId;
-    public List<Container> Containers { get; set; }
-    public float MaxSpeed { get; set; }
-    public int MaxCapacity { get; set; }
-    public float MaxContainersWeight { get; set; }
+    public List<Container> Containers { get; }
+    public float MaxSpeed { get; }
+    public int MaxCapacity { get; }
+    public float MaxContainersWeight { get; }
     
 
     public ContainerShip(float maxSpeed, int maxCapacity, float maxContainersWeight)
@@ -20,12 +20,12 @@ public class ContainerShip
         myId = _id++;
     }
 
-    public string getInfo()
+    public string Info()
     {
         return "Ship "+myId+" - "+"Max speed: "+MaxSpeed+", Max Capacity: "+MaxCapacity+", Max Containers Weight: "+MaxContainersWeight+", Containers on ship: "+Containers.Count;
     }
     
-    public bool loadContainter(Container container)
+    public bool LoadContainter(Container container)
     {
         float sumWeight = container.Weight;
         for (int i = 0; i < Containers.Count; i++)
@@ -44,20 +44,20 @@ public class ContainerShip
             Console.WriteLine("Ship "+myId+" is full");
             return false;
         }
-        if(container.ship!=null)
+        if(container.Ship!=null)
         {
-            Console.WriteLine("Container already on ship "+container.ship.myId);
+            Console.WriteLine("Container already on ship "+container.Ship.myId);
             return false;
         }
-        container.ship = this;
+        container.Ship = this;
         Containers.Add(container);
         return true;
     }
 
-    public void removeContainer(Container container)
+    public void RemoveContainer(Container container)
     {
         Containers.Remove(container);
-        container.ship = null;
+        container.Ship = null;
     }
     
     

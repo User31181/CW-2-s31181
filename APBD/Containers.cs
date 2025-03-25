@@ -2,18 +2,18 @@ namespace APBD;
 
 public abstract class Container
 {
-    public ContainerShip? ship { get; set; }
+    public ContainerShip? Ship { get; set; }
     public float LoadWeight { get; set; }
     public float Height { get; }
     public float Weight { get; }
     public float Depth { get; }
     public string SerialNumber { get; set; }
     public float MaxLoadWeight { get; }
-    public static int _id=1;
+    public static int Id=1;
 
     public Container(float height, float weight, float depth, float maxLoadWeight)
     {
-        ship = null;
+        Ship = null;
         LoadWeight = 0;
         Height = height;
         Weight = weight;
@@ -21,7 +21,7 @@ public abstract class Container
         MaxLoadWeight = maxLoadWeight;
     }
 
-    public string basicInfo()
+    protected string BasicInfo()
     {
         return SerialNumber + " - Load Weight: "+LoadWeight+", Height: " + Height + ", Weight: " + Weight + ", Depth: " + Depth + ", Max Load: " +
                MaxLoadWeight;
@@ -32,7 +32,7 @@ public abstract class Container
         LoadWeight = 0;
     }
     
-    abstract public string getInfo();
+    public abstract string Info();
 
     public virtual void FillLoad(float loadWeight)
     {
@@ -46,10 +46,22 @@ public abstract class Container
 
 public class CoolingContainer : Container
 {
-    public static Dictionary<string, float> items;
-    public String ProductInside { get; }
-    
-    public float Temperature { get; }
+    public static Dictionary<string, float> items = new Dictionary<string, float>
+    {
+        { "Bananas", 13.3f },
+        { "Chocolate", 18 },
+        { "Fish", 2 },
+        { "Meat", -15 },
+        { "Ice Cream", -18 },
+        { "Frozen Pizza", -30 },
+        { "Cheese", 7.2f },
+        { "Sausages", 5 },
+        { "Butter", 20.5f },
+        { "Eggs", 19 }
+    };
+    private String ProductInside { get; }
+
+    private float Temperature { get; }
     
     public CoolingContainer(float heigth, float weight, float depth, float maxLoad, float temperature, string product) : base(heigth, weight, depth, maxLoad)
     {
@@ -58,28 +70,14 @@ public class CoolingContainer : Container
                 
         Temperature = temperature;
         ProductInside = product;
-        SerialNumber = "KON-C-" + _id++;
+        SerialNumber = "KON-C-" + Id++;
     }
 
-    public override string getInfo()
+    public override string Info()
     {
-        return basicInfo()+", Temperature: "+Temperature+", Product: "+ProductInside;
+        return BasicInfo()+", Temperature: "+Temperature+", Product: "+ProductInside;
     }
-
-    public static void CreateDictionary()
-    { 
-        items = new Dictionary<string, float>();
-    items["Bananas"] = 13.3f;
-    items["Chocholate"] = 18;
-    items["Fish"] = 2;
-    items["Meat"] = -15;
-    items["Ice Cream"] = -18;
-    items["Frozen Pizza"] = -30;
-    items["Cheese"] = 7.2f;
-    items["Sausages"] = 5;
-    items["Butter"] = 20.5f;
-    items["Eggs"] = 19;
-    }
+    
 }
 
 public class LiquidContainer : Container, IHazardNotifier
@@ -88,10 +86,10 @@ public class LiquidContainer : Container, IHazardNotifier
 
 
 
-    public LiquidContainer(float heigth, float weight, float depth, float maxLoad, float isHazardous) : base(heigth, weight, depth, maxLoad)
+    public LiquidContainer(float heigth, float weight, float depth, float maxLoad, int isHazardous) : base(heigth, weight, depth, maxLoad)
     {
         IsHazardous = isHazardous == 1;
-        SerialNumber = "KON-L-" + _id++;
+        SerialNumber = "KON-L-" + Id++;
     }
 
     public void HazardNotify()
@@ -99,9 +97,9 @@ public class LiquidContainer : Container, IHazardNotifier
         Console.WriteLine("Hazard Notify - "+SerialNumber);
     }
 
-    public override string getInfo()
+    public override string Info()
     {
-        return basicInfo()+", IsHazardous: "+IsHazardous;
+        return BasicInfo()+", IsHazardous: "+IsHazardous;
     }
 
     public override void FillLoad(float loadWeight)
@@ -121,7 +119,7 @@ public class GasContainer : Container, IHazardNotifier
     public GasContainer(float heigth, float weight, float depth, float maxLoad, float pressure) : base(heigth, weight, depth, maxLoad)
     {
         Pressure = pressure;
-        SerialNumber = "KON-G-" + _id++;
+        SerialNumber = "KON-G-" + Id++;
     }
     
     public void HazardNotify()
@@ -134,9 +132,9 @@ public class GasContainer : Container, IHazardNotifier
         LoadWeight *= 0.05f;
     }
 
-    public override string getInfo()
+    public override string Info()
     {
-        return basicInfo()+", Pressure: "+Pressure;
+        return BasicInfo()+", Pressure: "+Pressure;
     }
     
 }
